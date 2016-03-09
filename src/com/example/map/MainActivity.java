@@ -19,11 +19,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.DotOptions;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolygonOptions;
@@ -121,12 +124,24 @@ public class MainActivity extends Activity {
 	/**
 	 * …Ë÷√¬∑œﬂ
 	 */
+	BitmapDescriptor bitmap;
+	OverlayOptions options;
 	private void setPos(){
 		List<LatLng> pts = new ArrayList<LatLng>();
 		for (int i = 0; i < placeList.size(); i++) {
 			LatLng pt = new LatLng(placeList.get(i).lat, placeList.get(i).lon);
 			pts.add(pt);
+			if (i==0) {
+				bitmap = BitmapDescriptorFactory.fromResource(R.drawable.icon_st);
+				options = new MarkerOptions().position(pt).icon(bitmap);
+				baiduMap.addOverlay(options);
+			} else if(i == placeList.size()-1){
+				bitmap = BitmapDescriptorFactory.fromResource(R.drawable.icon_en);
+				options = new MarkerOptions().position(pt).icon(bitmap);
+				baiduMap.addOverlay(options);
+			}
 		}
+		
 		OverlayOptions doOptions = new PolylineOptions().width(5)
 				.color(0xAAFF0000).points(pts);
 		baiduMap.addOverlay(doOptions);
