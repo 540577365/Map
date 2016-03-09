@@ -20,6 +20,9 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.DotOptions;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
@@ -78,6 +81,7 @@ public class MainActivity extends Activity {
 		// 获取地图控件引用
 		mMapView = (MapView) findViewById(R.id.bmapView);
 		baiduMap = mMapView.getMap();
+		baiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
 		
 		placeList = new ArrayList<Place>();
 		try {
@@ -126,6 +130,12 @@ public class MainActivity extends Activity {
 		OverlayOptions doOptions = new PolylineOptions().width(5)
 				.color(0xAAFF0000).points(pts);
 		baiduMap.addOverlay(doOptions);
+		
+		LatLng cenpt = new LatLng(placeList.get(placeList.size()/2).lat, placeList.get(placeList.size()/2).lon);
+		MapStatus status = new MapStatus.Builder().target(cenpt).zoom(6).build();
+		MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(status);
+		baiduMap.setMapStatus(mMapStatusUpdate);
+		
 	}
 	
 	
